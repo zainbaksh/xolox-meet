@@ -15,6 +15,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Track rooms: roomId -> Set of socket IDs
 const rooms = {};
 
+// Endpoint to check room size before joining (used by lobby for soft-cap warning).
+// Mesh WebRTC degrades fast past 4 peers (bandwidth scales as O(N^2)).
+const ROOM_SOFT_CAP = 4;
+app.get('/api/room-size/:roomId', (req, res) => {
+  const size = rooms[req.params.roomId]?.size || 0;
+  res.json({ size, softCap: ROOM_SOFT_CAP, isAtCap: size >= ROOM_SOFT_CAP });
+});
+
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
@@ -46,7 +54,8 @@ io.on('connection', (socket) => {
     console.log(`${userName} joined room ${roomId} (${rooms[roomId].size} users)`);
   });
 
-  // WebRTC signaling relay
+  // WebRTC signaling relay — the only media-related events now.
+  // Actual audio/video flows peer-to-peer via RTCPeerConnection, not through us.
   socket.on('offer', ({ to, offer }) => {
     io.to(to).emit('offer', { from: socket.id, offer });
   });
