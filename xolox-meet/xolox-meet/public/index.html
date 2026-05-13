@@ -619,22 +619,33 @@ const ICE_SERVERS = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    // Primary TURN - openrelay (UDP + TCP + TLS)
     {
-      urls: 'turn:openrelay.metered.ca:80',
+      urls: [
+        'turn:openrelay.metered.ca:80',
+        'turn:openrelay.metered.ca:80?transport=tcp',
+        'turn:openrelay.metered.ca:443',
+        'turn:openrelay.metered.ca:443?transport=tcp',
+        'turns:openrelay.metered.ca:443',
+      ],
       username: 'openrelayproject',
       credential: 'openrelayproject'
     },
+    // Backup TURN - freestun
     {
-      urls: 'turn:openrelay.metered.ca:443',
-      username: 'openrelayproject',
-      credential: 'openrelayproject'
-    },
-    {
-      urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-      username: 'openrelayproject',
-      credential: 'openrelayproject'
+      urls: [
+        'turn:freestun.net:3478',
+        'turns:freestun.net:5349',
+      ],
+      username: 'free',
+      credential: 'free'
     }
-  ]
+  ],
+  iceCandidatePoolSize: 10,
+  bundlePolicy: 'max-bundle',
+  rtcpMuxPolicy: 'require'
 };
 
 // ════════════════════════════════════════
@@ -838,7 +849,23 @@ async function createPeerConnection(peerId, peerName, shouldOffer) {
   };
 
   pc.onconnectionstatechange = () => {
-    if (pc.connectionState === 'failed') pc.restartIce();
+    console.log(`[${peerId}] connection state:`, pc.connectionState);
+    if (pc.connectionState === 'failed') {
+      console.warn(`[${peerId}] Connection failed, restarting ICE...`);
+      pc.restartIce();
+    }
+    if (pc.connectionState === 'disconnected') {
+      // Give it 5s to recover before restarting
+      setTimeout(() => {
+        if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+          pc.restartIce();
+        }
+      }, 5000);
+    }
+  };
+
+  pc.oniceconnectionstatechange = () => {
+    console.log(`[${peerId}] ICE state:`, pc.iceConnectionState);
   };
 
   if (shouldOffer) {
