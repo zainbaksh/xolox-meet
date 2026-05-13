@@ -466,6 +466,142 @@
       .ctrl-btn { width: 44px; height: 44px; }
       .ctrl-btn-end { width: 60px; height: 44px; }
     }
+
+    /* ══════════════════════════════
+       LOBBY / PRE-JOIN PAGE
+    ══════════════════════════════ */
+    #page-lobby {
+      display: none; position: fixed; inset: 0; z-index: 50;
+      background: #111; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0;
+    }
+    #page-lobby.active { display: flex; }
+
+    .lobby-wrap {
+      display: flex; gap: 40px; align-items: flex-start;
+      width: 100%; max-width: 860px; padding: 24px;
+    }
+
+    /* Left: camera preview */
+    .lobby-preview {
+      flex: 1; position: relative; border-radius: 16px; overflow: hidden;
+      background: #1a1a1a; aspect-ratio: 16/9; min-width: 0;
+    }
+
+    .lobby-preview video {
+      width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1);
+    }
+
+    .lobby-preview .lp-avatar {
+      position: absolute; inset: 0; display: none;
+      align-items: center; justify-content: center;
+      background: #1a1a1a; font-size: 4rem; font-weight: 600;
+      color: var(--accent); font-family: 'Google Sans Display', sans-serif;
+    }
+    .lobby-preview.cam-off .lp-avatar { display: flex; }
+    .lobby-preview.cam-off video { opacity: 0; }
+
+    /* Permission denied banner */
+    .lobby-perm-error {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.85); align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px; text-align: center; padding: 20px;
+      border-radius: 16px;
+    }
+    .lobby-perm-error.visible { display: flex; }
+    .lobby-perm-error .material-symbols-rounded { font-size: 36px; color: #ea4335; }
+    .lobby-perm-error p { font-size: 0.88rem; color: #e8eaed; line-height: 1.5; }
+    .lobby-perm-error strong { color: #fff; }
+
+    /* Lobby preview controls (mic/cam toggle) */
+    .lobby-preview-btns {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 10px;
+    }
+
+    .lp-btn {
+      width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(60,64,67,0.9); color: #e8eaed;
+      transition: background 0.15s;
+    }
+    .lp-btn:hover { background: rgba(74,77,81,0.95); }
+    .lp-btn.off { background: rgba(234,67,53,0.9); }
+    .lp-btn .material-symbols-rounded { font-size: 20px; }
+
+    /* Right: join panel */
+    .lobby-panel {
+      width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 18px;
+      padding-top: 8px;
+    }
+
+    .lobby-panel h2 {
+      font-size: 1.3rem; font-weight: 600; font-family: 'Google Sans Display', sans-serif;
+    }
+
+    .lobby-panel .room-id-display {
+      font-size: 0.82rem; color: #9aa0a6; background: #1e1e1e;
+      border: 1px solid #333; border-radius: 8px; padding: 8px 12px;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    /* Mic level meter */
+    .mic-test-row {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .mic-test-label {
+      font-size: 0.78rem; color: #9aa0a6; font-family: 'Google Sans', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .mic-test-label .material-symbols-rounded { font-size: 16px; }
+    .mic-meter-bar {
+      height: 6px; background: #2a2a2a; border-radius: 99px; overflow: hidden;
+    }
+    .mic-meter-fill {
+      height: 100%; width: 0%; border-radius: 99px;
+      background: linear-gradient(90deg, #22c55e, #86efac);
+      transition: width 0.08s ease;
+    }
+    .mic-no-signal {
+      font-size: 0.75rem; color: #9aa0a6; font-family: 'Google Sans', sans-serif;
+    }
+
+    /* Device selectors */
+    .lobby-selects { display: flex; flex-direction: column; gap: 10px; }
+
+    .lobby-select-row { display: flex; flex-direction: column; gap: 4px; }
+    .lobby-select-row label {
+      font-size: 0.75rem; color: #9aa0a6;
+      font-family: 'Google Sans', sans-serif;
+    }
+    .lobby-select-row select {
+      background: #1e1e1e; border: 1px solid #333; color: #e8eaed;
+      border-radius: 8px; padding: 8px 10px; font-family: 'Google Sans', sans-serif;
+      font-size: 0.82rem; outline: none; cursor: pointer; width: 100%;
+    }
+    .lobby-select-row select:focus { border-color: rgba(34,197,94,0.5); }
+
+    /* Join button */
+    .lobby-join-btn {
+      width: 100%; padding: 12px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000; font-family: 'Google Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .lobby-join-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .lobby-join-btn:active { transform: scale(0.98); }
+
+    .lobby-back {
+      text-align: center; font-size: 0.82rem; color: #9aa0a6;
+      cursor: pointer; font-family: 'Google Sans', sans-serif;
+    }
+    .lobby-back:hover { color: #e8eaed; }
+
+    @media (max-width: 640px) {
+      .lobby-wrap { flex-direction: column; gap: 20px; }
+      .lobby-panel { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -493,6 +629,66 @@
           <button class="btn btn-ghost" onclick="joinRoom()">Join →</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ LOBBY / PRE-JOIN PAGE ══ -->
+<div id="page-lobby">
+  <div class="lobby-wrap">
+    <!-- Camera preview -->
+    <div class="lobby-preview" id="lobby-preview">
+      <video id="lobby-video" autoplay playsinline muted></video>
+      <div class="lp-avatar" id="lobby-avatar">?</div>
+      <div class="lobby-perm-error" id="lobby-perm-error">
+        <span class="material-symbols-rounded">videocam_off</span>
+        <p><strong>Camera & microphone blocked</strong><br/>
+        Click the camera icon in your browser's address bar and allow access, then refresh.</p>
+      </div>
+      <div class="lobby-preview-btns">
+        <button class="lp-btn" id="lp-mic-btn" onclick="lobbyToggleMic()" data-tooltip="Toggle mic">
+          <span class="material-symbols-rounded" id="lp-mic-icon">mic</span>
+        </button>
+        <button class="lp-btn" id="lp-cam-btn" onclick="lobbyToggleCam()" data-tooltip="Toggle camera">
+          <span class="material-symbols-rounded" id="lp-cam-icon">videocam</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Join panel -->
+    <div class="lobby-panel">
+      <h2>Ready to join?</h2>
+      <div class="room-id-display" id="lobby-room-display">—</div>
+
+      <!-- Mic level meter -->
+      <div class="mic-test-row">
+        <div class="mic-test-label">
+          <span class="material-symbols-rounded">mic</span>
+          Microphone level
+        </div>
+        <div class="mic-meter-bar">
+          <div class="mic-meter-fill" id="mic-meter-fill"></div>
+        </div>
+        <div class="mic-no-signal" id="mic-no-signal" style="display:none">
+          No signal — check your mic permissions
+        </div>
+      </div>
+
+      <!-- Device selectors -->
+      <div class="lobby-selects">
+        <div class="lobby-select-row">
+          <label>Camera</label>
+          <select id="lobby-cam-select" onchange="switchCamera(this.value)"></select>
+        </div>
+        <div class="lobby-select-row">
+          <label>Microphone</label>
+          <select id="lobby-mic-select" onchange="switchMic(this.value)"></select>
+        </div>
+      </div>
+
+      <button class="lobby-join-btn" onclick="lobbyJoin()">Join now</button>
+      <div class="lobby-back" onclick="backToHome()">← Back</div>
     </div>
   </div>
 </div>
@@ -688,51 +884,234 @@ function updatePeerCount() {
 function startNew() {
   const name = document.getElementById('name-new').value.trim() || 'Guest';
   const room = generateRoomId();
-  enterMeeting(room, name);
+  goToLobby(room, name);
 }
 
 function joinRoom() {
   let room = document.getElementById('room-join').value.trim();
   const name = document.getElementById('name-join').value.trim() || 'Guest';
   if (!room) { showToast('Enter a meeting ID'); return; }
-  enterMeeting(room, name);
+  goToLobby(room, name);
+}
+
+// ════════════════════════════════════════
+// LOBBY
+// ════════════════════════════════════════
+let lobbyStream = null;
+let micAnalyser = null, micAnimFrame = null;
+let lobbyMicOn = true, lobbyCamOn = true;
+let pendingRoom = '', pendingName = '';
+
+async function goToLobby(roomId, name) {
+  pendingRoom = roomId;
+  pendingName = name;
+
+  document.getElementById('page-home').style.display = 'none';
+  document.getElementById('page-lobby').classList.add('active');
+  document.getElementById('lobby-room-display').textContent = roomId;
+  document.getElementById('lobby-avatar').textContent = (name || 'G')[0].toUpperCase();
+
+  history.pushState({}, '', `?room=${roomId}`);
+
+  await lobbyRequestPermissions();
+  await populateDevices();
+}
+
+async function lobbyRequestPermissions() {
+  const permError = document.getElementById('lobby-perm-error');
+  const preview = document.getElementById('lobby-preview');
+  permError.classList.remove('visible');
+
+  try {
+    lobbyStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    document.getElementById('lobby-video').srcObject = lobbyStream;
+    preview.classList.remove('cam-off');
+    startMicMeter(lobbyStream);
+    document.getElementById('mic-no-signal').style.display = 'none';
+  } catch (e) {
+    // Try audio only
+    try {
+      lobbyStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+      preview.classList.add('cam-off');
+      lobbyCamOn = false;
+      updateLobbyBtnState();
+      startMicMeter(lobbyStream);
+      document.getElementById('mic-no-signal').style.display = 'none';
+    } catch (e2) {
+      // Both denied
+      lobbyStream = new MediaStream();
+      preview.classList.add('cam-off');
+      lobbyCamOn = false;
+      lobbyMicOn = false;
+      updateLobbyBtnState();
+      permError.classList.add('visible');
+      document.getElementById('mic-no-signal').style.display = 'block';
+    }
+  }
+}
+
+function startMicMeter(stream) {
+  if (micAnimFrame) cancelAnimationFrame(micAnimFrame);
+  try {
+    const ctx = new AudioContext();
+    const src = ctx.createMediaStreamSource(stream);
+    micAnalyser = ctx.createAnalyser();
+    micAnalyser.fftSize = 256;
+    src.connect(micAnalyser);
+    const data = new Uint8Array(micAnalyser.frequencyBinCount);
+    const fill = document.getElementById('mic-meter-fill');
+    let silenceCount = 0;
+
+    function draw() {
+      micAnimFrame = requestAnimationFrame(draw);
+      micAnalyser.getByteFrequencyData(data);
+      const avg = data.reduce((a, b) => a + b, 0) / data.length;
+      const pct = Math.min(100, avg * 2.5);
+      fill.style.width = pct + '%';
+      silenceCount = pct < 2 ? silenceCount + 1 : 0;
+      document.getElementById('mic-no-signal').style.display = silenceCount > 60 ? 'block' : 'none';
+    }
+    draw();
+  } catch(e) {}
+}
+
+function lobbyToggleMic() {
+  lobbyMicOn = !lobbyMicOn;
+  lobbyStream.getAudioTracks().forEach(t => t.enabled = lobbyMicOn);
+  updateLobbyBtnState();
+}
+
+function lobbyToggleCam() {
+  lobbyCamOn = !lobbyCamOn;
+  lobbyStream.getVideoTracks().forEach(t => t.enabled = lobbyCamOn);
+  document.getElementById('lobby-preview').classList.toggle('cam-off', !lobbyCamOn);
+  updateLobbyBtnState();
+}
+
+function updateLobbyBtnState() {
+  const mb = document.getElementById('lp-mic-btn');
+  const cb = document.getElementById('lp-cam-btn');
+  mb.classList.toggle('off', !lobbyMicOn);
+  cb.classList.toggle('off', !lobbyCamOn);
+  document.getElementById('lp-mic-icon').textContent = lobbyMicOn ? 'mic' : 'mic_off';
+  document.getElementById('lp-cam-icon').textContent = lobbyCamOn ? 'videocam' : 'videocam_off';
+}
+
+async function populateDevices() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const camSel = document.getElementById('lobby-cam-select');
+    const micSel = document.getElementById('lobby-mic-select');
+    camSel.innerHTML = '';
+    micSel.innerHTML = '';
+
+    devices.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.deviceId;
+      opt.textContent = d.label || `${d.kind} (${d.deviceId.slice(0,8)})`;
+      if (d.kind === 'videoinput') camSel.appendChild(opt);
+      if (d.kind === 'audioinput') micSel.appendChild(opt);
+    });
+
+    // Mark currently active devices
+    const vTrack = lobbyStream?.getVideoTracks()[0];
+    const aTrack = lobbyStream?.getAudioTracks()[0];
+    if (vTrack) {
+      const settings = vTrack.getSettings();
+      if (settings.deviceId) camSel.value = settings.deviceId;
+    }
+    if (aTrack) {
+      const settings = aTrack.getSettings();
+      if (settings.deviceId) micSel.value = settings.deviceId;
+    }
+  } catch(e) {}
+}
+
+async function switchCamera(deviceId) {
+  try {
+    const newStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } }, audio: false });
+    const newTrack = newStream.getVideoTracks()[0];
+    lobbyStream.getVideoTracks().forEach(t => { t.stop(); lobbyStream.removeTrack(t); });
+    lobbyStream.addTrack(newTrack);
+    document.getElementById('lobby-video').srcObject = lobbyStream;
+  } catch(e) { showToast('Could not switch camera'); }
+}
+
+async function switchMic(deviceId) {
+  try {
+    const newStream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } }, video: false });
+    const newTrack = newStream.getAudioTracks()[0];
+    lobbyStream.getAudioTracks().forEach(t => { t.stop(); lobbyStream.removeTrack(t); });
+    lobbyStream.addTrack(newTrack);
+    startMicMeter(lobbyStream);
+  } catch(e) { showToast('Could not switch microphone'); }
+}
+
+function lobbyJoin() {
+  if (micAnimFrame) { cancelAnimationFrame(micAnimFrame); micAnimFrame = null; }
+  document.getElementById('lobby-video').srcObject = null;
+  document.getElementById('page-lobby').classList.remove('active');
+  enterMeeting(pendingRoom, pendingName, lobbyStream, lobbyMicOn, lobbyCamOn);
+}
+
+function backToHome() {
+  if (micAnimFrame) { cancelAnimationFrame(micAnimFrame); micAnimFrame = null; }
+  lobbyStream?.getTracks().forEach(t => t.stop());
+  lobbyStream = null;
+  document.getElementById('page-lobby').classList.remove('active');
+  document.getElementById('page-home').style.display = 'flex';
+  history.pushState({}, '', window.location.pathname);
 }
 
 // ════════════════════════════════════════
 // ENTER MEETING
 // ════════════════════════════════════════
-async function enterMeeting(roomId, name) {
+async function enterMeeting(roomId, name, stream, micEnabled, camEnabled) {
   myName = name;
   myRoom = roomId;
 
-  document.getElementById('page-home').style.display = 'none';
-  document.getElementById('page-meeting').classList.add('active');
-  document.getElementById('meet-controls').classList.add('active');
-  // room label removed from top bar
-  document.getElementById('ctrl-room-display').textContent = roomId;
-
-  startClock();
-
-  try {
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  } catch (e) {
+  // Use stream from lobby, or request fresh if none
+  if (stream && stream.getTracks().length > 0) {
+    localStream = stream;
+  } else {
     try {
-      localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-      showToast('Camera not available — audio only');
-    } catch (e2) {
-      localStream = new MediaStream();
-      showToast('No camera or mic found');
+      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    } catch(e) {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+      } catch(e2) {
+        localStream = new MediaStream();
+      }
     }
   }
 
-  addVideoTile('local', localStream, myName, true);
-  updatePeerCount();
+  // Sync mic/cam state from lobby
+  micOn = micEnabled !== undefined ? micEnabled : true;
+  camOn = camEnabled !== undefined ? camEnabled : true;
+  localStream.getAudioTracks().forEach(t => t.enabled = micOn);
+  localStream.getVideoTracks().forEach(t => t.enabled = camOn);
+
+  document.getElementById('page-meeting').classList.add('active');
+  document.getElementById('meet-controls').classList.add('active');
+  document.getElementById('ctrl-room-display').textContent = roomId;
+
+  // Sync button states
+  const micBtn = document.getElementById('btn-mic');
+  const camBtn = document.getElementById('btn-cam');
+  micBtn.classList.toggle('off', !micOn);
+  document.getElementById('icon-mic').textContent = micOn ? 'mic' : 'mic_off';
+  camBtn.classList.toggle('off', !camOn);
+  document.getElementById('icon-cam').textContent = camOn ? 'videocam' : 'videocam_off';
+
+  startClock();
+
+  const localTile = addVideoTile('local', localStream, myName, true);
+  if (!camOn) document.getElementById('tile-local')?.classList.add('cam-off');
+  if (!micOn) document.getElementById('tile-local')?.classList.add('mic-off');
 
   socket = io();
   setupSocketEvents();
   socket.emit('join-room', { roomId, userName: name });
-
-  history.pushState({}, '', `?room=${roomId}`);
 }
 
 // ════════════════════════════════════════
@@ -828,9 +1207,12 @@ async function createPeerConnection(peerId, peerName, shouldOffer) {
 
   pc.ontrack = (e) => {
     const track = e.track;
-    remoteStream.addTrack(track);
 
-    // Update the video element srcObject so new tracks are picked up live
+    // Avoid duplicate tracks
+    if (!remoteStream.getTracks().find(t => t.id === track.id)) {
+      remoteStream.addTrack(track);
+    }
+
     const tile = document.getElementById(`tile-${peerId}`);
     if (tile) {
       const video = tile.querySelector('video');
@@ -839,6 +1221,20 @@ async function createPeerConnection(peerId, peerName, shouldOffer) {
         const unlock = () => { video.play(); document.removeEventListener('click', unlock); };
         document.addEventListener('click', unlock);
       });
+
+      // Show/hide cam-off avatar based on video track state
+      if (track.kind === 'video') {
+        tile.classList.toggle('cam-off', !track.enabled || track.muted);
+        track.onmute = () => tile.classList.add('cam-off');
+        track.onunmute = () => tile.classList.remove('cam-off');
+        track.onended = () => tile.classList.add('cam-off');
+      }
+
+      // Show mic-off icon based on audio track state
+      if (track.kind === 'audio') {
+        track.onmute = () => tile.classList.add('mic-off');
+        track.onunmute = () => tile.classList.remove('mic-off');
+      }
     }
   };
 
